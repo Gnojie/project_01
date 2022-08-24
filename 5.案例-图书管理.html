@@ -105,6 +105,7 @@
                 let publisher = $('#publisher').val().trim()
                 $.post('http://www.liulongbin.top:3006/api/addbook',{bookname : bookname , author : author , publisher: publisher},function(res){
                     console.log(res) //这里的res是服务器返回的数据
+                    console.log(res) //这里的res是服务器返回的数据
                 })
             })
         })
