@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>发起get请求</button>
+    <script src="/jquery/jquery-3.5.1.js"></script>
+    <script>
+        $(function(){
+            $('button').on('click',function(){
+                // 获取id为 1 的图书
+                $.get('http://www.liulongbin.top:3006/api/getbooks',{id:1},function(res){
+                    console.log(res) //这里的res是服务器返回的数据
+                })
+            })
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 15px;
+        }
+    </style>
+    <link rel="stylesheet" href="/libs/bootstrap.css" />
+</head>
+
+<body>
+    <!-- 添加图书Pannel面板 -->
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">添加新图书</h3>
+        </div>
+        <div class="panel-body form-inline">
+
+            <div class="input-group">
+                <div class="input-group-addon">书名</div>
+                <input type="text" class="form-control" id="bookname" placeholder="请输入书名">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-addon">作者</div>
+                <input type="text" class="form-control" id="author" placeholder="请输入作者">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-addon">出版社</div>
+                <input type="text" class="form-control" id="publisher" placeholder="请输人出版社">
+            </div>
+
+            <button id='btn' class="btn btn-primary">添加</button>
+        </div>
+    </div>
+
+    <!-- 添加表格 -->
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    <script src="/libs/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            // 获取图书列表数据
+            function getbooks() {
+                $.get('http://www.liulongbin.top:3006/api/getbooks', function (res) {
+                    if(res.status !== 200 ){
+                        
+                    }
+                    // res是获取过来的数据
+                    let arr = res.data
+                    // 将数据渲染进表格
+                    for (let i = 0; i < arr.length; i++) {
+                        $('tbody').append(`
+                        <tr>
+                            <td>${arr[i].id}</td>
+                            <td>${arr[i].bookname}</td>
+                            <td>${arr[i].author}</td>
+                            <td>${arr[i].publisher}</td>
+                            <td><a href:"#">删除</a></td> 
+                        </tr>
+                        `)
+                    }
+                })
+            }
+            getbooks()
+            // 为删除链接绑定单击事件处理函数
+            // 错误做法:通过dom写上去的dom元素无法直接绑定事件
+            // 可以通过事件代理的方式去完成事件的绑定
+
+            // jQuery给指定子元素绑定事件的事件代理方式 jQuery对象.on(事件类型, 子元素 ,回调函数)
+            $('tbody').on('click','a',function(){
+                let $this = $(this)
+                $this.parent().parent().remove()
+            })
+
+            // 为添加按钮绑定单击事件
+            // trim删除字符串开始和末尾的空格
+            $('#btn').on('click',function(){
+                // 获取书名
+                let bookname = $('#bookname').val().trim()
+                // 获取作者
+                let author = $('#author').val().trim()
+                // 获取出版社
+                let publisher = $('#publisher').val().trim()
+                $.post('http://www.liulongbin.top:3006/api/addbook',{bookname : bookname , author : author , publisher: publisher},function(res){
+                    console.log(res) //这里的res是服务器返回的数据
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>
